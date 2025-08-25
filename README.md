@@ -1,217 +1,307 @@
-# Android Dice Game
+# Android Movie Database Application
 
-A strategic dice game Android application built with **Kotlin** and **Jetpack Compose** where players compete against an intelligent computer opponent to reach a target score of 101 points (or custom target) using 5 dice.
+A comprehensive movie database Android application built with **Kotlin** and **Jetpack Compose** that integrates with the OMDb API for movie data retrieval and uses Room database for local storage and search functionality.
 
-## Game Overview
+## Overview
 
-This is a turn-based dice game where a human player competes against the computer. Both players throw 5 dice simultaneously, with the objective of being the first to reach 101 points (or a custom target score). The game features strategic decision-making with optional re-rolls and an intelligent computer opponent.
-
-## Game Rules
-
-### Basic Gameplay
-- Both players throw 5 dice simultaneously
-- Score is calculated as the sum of all 5 dice faces
-- First player to reach 101 points (or custom target) wins
-- Each turn consists of up to 3 rolls (1 initial + 2 optional re-rolls)
-
-### Turn Mechanics
-1. **Initial Roll**: Both players roll all 5 dice
-2. **Optional Re-rolls**: Players can choose to:
-   - Score the current roll (end turn)
-   - Re-roll selected dice (up to 2 more times)
-   - Keep specific dice and re-roll others
-3. **Forced Scoring**: After 3 total rolls, players must score
-
-### Winning Conditions
-- **Standard Win**: First player to reach target score
-- **Tie Scenario**: If both players reach target in same number of attempts:
-  - Player with higher score wins
-  - If scores are equal: sudden death rounds until tie is broken
-  - No re-rolls allowed in sudden death rounds
+This application serves as a movie knowledge testing and acquisition platform, allowing users to search for movies, manage a local database, and perform various movie-related queries. It demonstrates modern Android development practices with API integration, local database management, and responsive UI design.
 
 ## Features
 
 ### Core Functionality
-- **Intuitive UI**: Clean, user-friendly interface built with Jetpack Compose
-- **Dice Animation**: Visual dice rolling with random outcomes (1-6)
-- **Strategic Re-rolls**: Select which dice to keep/re-roll
-- **Score Tracking**: Real-time score display for both players
-- **Win/Loss Detection**: Automatic game termination with colored victory messages
-
-### Advanced Features
-- **Custom Target Score**: Set winning score (default: 101)
-- **Win Counter**: Track total wins (Human:X / Computer:Y)
-- **Intelligent AI**: Advanced computer strategy with decision-making algorithms
-- **Tie Breaking**: Complete implementation of sudden death rules
-- **Orientation Support**: Full portrait/landscape mode compatibility
+- **Movie Database Management**: Add and manage movies in local SQLite database using Room
+- **Online Movie Search**: Search for movies using OMDb API integration
+- **Actor-Based Search**: Find movies by actor names with partial matching
+- **Title-Based Web Search**: Search movies by title directly from OMDb API
+- **Data Persistence**: Local storage with Room database for offline access
 
 ### Technical Features
-- **State Preservation**: Game state maintained through device rotations
-- **No Third-party Libraries**: Built using only standard Android APIs
-- **Jetpack Compose**: Modern UI toolkit (no XML layouts)
-- **Activity Recreation Handling**: Proper lifecycle management
+- **RESTful API Integration**: OMDb API for movie data retrieval
+- **JSON Parsing**: Native Android JSON parsing without third-party libraries
+- **Room Database**: Local SQLite database with proper table relationships
+- **State Management**: Jetpack Compose state handling with configuration changes
+- **Orientation Support**: Full portrait/landscape compatibility
+- **Network Operations**: HTTP requests using standard Android APIs
 
 ## Technology Stack
 
 - **Language**: Kotlin
 - **UI Framework**: Jetpack Compose
-- **Platform**: Android
-- **Minimum SDK**: API level specified in app configuration
-- **Architecture**: MVVM pattern with Compose state management
+- **Database**: Room (SQLite)
+- **API Integration**: OMDb API (http://www.omdbapi.com/)
+- **HTTP Client**: Standard Android HTTP libraries
+- **JSON Parsing**: Native Android JSON parsing
+- **Architecture**: MVVM with Repository pattern
+
+## Prerequisites
+
+- Android Studio Arctic Fox or later
+- Android SDK with minimum API level support
+- OMDb API key (free registration required)
+- Internet connection for API calls
+- Kotlin plugin enabled
 
 ## Installation & Setup
 
-### Prerequisites
-- Android Studio Arctic Fox or later
-- Android SDK with minimum API level support
-- Kotlin plugin enabled
-- Device or emulator for testing
-
-### Setup Instructions
-
-1. **Clone the Repository**
+### 1. Clone the Repository
 ```bash
 git clone https://github.com/rehangodakumbura/MovieApp.git
-cd android-dice-game
+cd MovieApp
 ```
 
-2. **Open in Android Studio**
-- Launch Android Studio
-- Select "Open an Existing Project"
-- Navigate to the cloned directory
-- Wait for Gradle sync to complete
+### 2. OMDb API Setup
+1. Visit [OMDb API](http://www.omdbapi.com/)
+2. Register for a free account to get your API key
+3. Add your API key to the project:
+   ```kotlin
+   // In your Constants or Config file
+   const val OMDB_API_KEY = "YOUR_API_KEY_HERE"
+   ```
 
-3. **Build and Run**
-- Connect an Android device or start an emulator
-- Click "Run" button or use `Shift + F10`
-- Install and launch the application
+### 3. Build and Run
+1. Open project in Android Studio
+2. Sync Gradle files
+3. Connect Android device or start emulator
+4. Run the application
 
-## How to Play
+## Application Structure
 
-### Starting a Game
-1. Launch the application
-2. Tap **"New Game"** to start playing
-3. Optionally set a custom target score
-4. Begin rolling dice!
+### Main Navigation
+The app starts with three primary options:
+- **Add Movies to DB**: Populate local database with predefined movies
+- **Search for Movies**: Online movie search and database storage
+- **Search for Actors**: Local database search by actor names
 
-### During Gameplay
-1. **Throw Dice**: Tap "Throw" to roll all 5 dice
-2. **Select Dice**: Choose which dice to keep for re-rolls
-3. **Re-roll**: Tap "Throw" again to re-roll unselected dice
-4. **Score**: Tap "Score" to end turn and add points
-5. **Strategy**: Decide whether to risk re-rolls for higher scores
+### Database Schema
 
-### Game Controls
-- **Throw Button**: Roll dice (initial or re-roll)
-- **Score Button**: End turn and record current score
-- **Dice Selection**: Tap dice images to select/deselect for keeping
-- **Back Button**: Return to main menu after game ends
+The Room database contains tables for storing:
+- **Movies**: Title, year, rating, release date, runtime, genre
+- **Directors**: Director information
+- **Actors**: Actor details with movie relationships
+- **Additional metadata**: Plot, ratings, awards, etc.
 
-## Computer AI Strategy
+## Core Features
 
-The computer opponent uses an advanced decision-making algorithm that considers:
+### 1. Database Population
+- Automatically creates and populates SQLite database
+- Stores comprehensive movie information from predefined dataset
+- Uses Room library for database operations
+- Handles all movie fields including:
+  - Title, Year, Rated, Released, Runtime
+  - Genre, Director, Writer, Actors
+  - Plot, Language, Country, Awards
+  - Ratings, IMDb information
 
-### Strategy Components
-- **Risk Assessment**: Evaluates current roll value vs. potential improvements
-- **Game State Analysis**: Considers current scores and remaining gap to target
-- **Probability Calculations**: Estimates likelihood of improvement with re-rolls
-- **Adaptive Difficulty**: Adjusts strategy based on game progression
+### 2. Online Movie Search
+**Search Interface:**
+- Text input for movie title
+- "Retrieve Movie" button for API calls
+- "Save movie to Database" button for local storage
 
-### Decision Factors
-1. **Current Roll Value**: Higher values less likely to be re-rolled
-2. **Score Gap**: Trailing players take more risks
-3. **Remaining Attempts**: End-game pressure influences decisions
-4. **Dice Distribution**: Considers which specific dice to re-roll
+**Data Display Format:**
+```
+Title: "The Shawshank Redemption"
+Year: 1994
+Rated: R
+Released: 14 Oct 1994
+Runtime: 142 min
+Genre: Drama
+Director: Frank Darabont
+Writer: Stephen King, Frank Darabont
+Actors: Tim Robbins, Morgan Freeman, Bob Gunton
+Plot: "Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency."
+```
 
-The AI cannot see the human player's current dice but is aware of both players' total scores, creating realistic competitive gameplay.
+### 3. Actor Search
+- **Case-insensitive search**: Search works regardless of case
+- **Partial matching**: Find actors with substring matches
+- **Comprehensive results**: Displays all matching movies
+- **Example**: Searching "rUISE" finds movies with "Tom Cruise" or "Penelope Cruise"
+
+### 4. Title-Based Web Search
+- Direct OMDb API integration for title searches
+- Case-insensitive partial matching
+- Displays multiple results (minimum 10 movies or first page)
+- Real-time web service queries (not local database)
+
+## API Integration
+
+### OMDb API Usage
+```kotlin
+// Example API call structure
+val apiUrl = "https://www.omdbapi.com/?t=${movieTitle}&apikey=${API_KEY}"
+```
+
+**Response Handling:**
+- JSON parsing using native Android libraries
+- Error handling for network issues
+- Proper data mapping to local models
+
+**Sample API Response:**
+```json
+{
+  "Title": "Matrix",
+  "Year": "1993",
+  "Rated": "N/A",
+  "Released": "01 Mar 1993",
+  "Runtime": "60 min",
+  "Genre": "Action, Drama, Fantasy",
+  "Director": "N/A",
+  "Writer": "Grenville Case",
+  "Actors": "Nick Mancuso, Phillip Jarrett, Carrie-Anne Moss",
+  "Plot": "Steven Matrix is one of the underworld's foremost hitmen...",
+  "imdbRating": "8.0",
+  "Response": "True"
+}
+```
 
 ## Project Structure
 
 ```
 app/
-├── src/main/java/com/yourpackage/dicegame/
-│   ├── MainActivity.kt              # Main activity and navigation
-│   ├── GameScreen.kt               # Main game interface
-│   ├── GameViewModel.kt            # Game logic and state management
-│   ├── DiceGame.kt                 # Core game mechanics
-│   ├── ComputerStrategy.kt         # AI decision algorithms
-│   ├── GameState.kt                # Game state data classes
-│   └── ui/
-│       ├── components/             # Reusable UI components
-│       └── theme/                  # App theming
+├── src/main/java/com/yourpackage/moviedatabase/
+│   ├── MainActivity.kt                 # Main activity and navigation
+│   ├── ui/
+│   │   ├── screens/
+│   │   │   ├── MainMenuScreen.kt      # Home screen with navigation buttons
+│   │   │   ├── MovieSearchScreen.kt   # Online movie search interface
+│   │   │   ├── ActorSearchScreen.kt   # Actor-based search screen
+│   │   │   └── TitleSearchScreen.kt   # Title-based web search
+│   │   ├── components/                # Reusable UI components
+│   │   └── theme/                     # App theming
+│   ├── data/
+│   │   ├── database/
+│   │   │   ├── MovieDatabase.kt       # Room database configuration
+│   │   │   ├── entities/              # Database entities
+│   │   │   └── dao/                   # Data Access Objects
+│   │   ├── repository/
+│   │   │   └── MovieRepository.kt     # Data layer abstraction
+│   │   └── api/
+│   │       └── OMDbService.kt         # API service implementation
+│   ├── domain/
+│   │   └── models/                    # Domain models
+│   └── viewmodels/                    # ViewModels for screens
 └── src/main/res/
-    └── drawable/                   # Dice images and other assets
+    └── values/                        # String resources and themes
 ```
 
 ## Key Classes
 
-### GameViewModel
-- Manages game state and business logic
-- Handles dice rolling and scoring
-- Implements computer AI strategy
-- Preserves state during configuration changes
+### Database Components
+- **MovieEntity**: Room entity for movie data
+- **MovieDao**: Database access operations
+- **MovieDatabase**: Room database configuration
+- **DatabaseInitializer**: Populates database with initial data
 
-### DiceGame
-- Core game mechanics implementation
-- Score calculations and win condition checking
-- Turn management and re-roll logic
+### API Components
+- **OMDbService**: HTTP client for API calls
+- **ApiResponse**: Data classes for API responses
+- **NetworkManager**: Network operations and error handling
 
-### ComputerStrategy
-- Advanced AI decision-making algorithms
-- Risk assessment and probability calculations
-- Adaptive gameplay based on current game state
+### UI Components
+- **MovieSearchViewModel**: Manages search state and API calls
+- **ActorSearchViewModel**: Handles local database queries
+- **DatabaseViewModel**: Manages database operations
 
 ## Development Features
 
 ### State Management
-- Proper handling of device rotations
-- Activity recreation without data loss
-- Compose state preservation techniques
+- **Configuration Changes**: Proper handling of screen rotations
+- **Data Persistence**: Maintains search results and input during orientation changes
+- **Loading States**: UI feedback during API calls and database operations
+
+### Error Handling
+- **Network Errors**: Graceful handling of connectivity issues
+- **API Errors**: User-friendly error messages for failed requests
+- **Database Errors**: Exception handling for database operations
+- **Input Validation**: Prevents crashes from invalid user input
 
 ### UI/UX Design
-- Material Design principles
-- Responsive layouts for different screen sizes
-- Smooth animations and transitions
-- Accessibility considerations
-
-### Code Quality
-- Clean architecture patterns
-- Comprehensive code documentation
-- Meaningful variable and function naming
-- Modular component structure
+- **Material Design**: Modern Android design principles
+- **Responsive Layout**: Adapts to different screen sizes and orientations
+- **Loading Indicators**: Visual feedback during operations
+- **Search Results**: Clear, readable movie information display
 
 ## Testing
 
-The application has been tested for:
-- Various device orientations
-- Different screen sizes and densities
-- Game logic correctness
-- AI strategy effectiveness
-- State preservation scenarios
-- Edge cases and error conditions
+### Manual Testing Checklist
+- [ ] Database population on first launch
+- [ ] Online movie search with valid titles
+- [ ] Movie data saving to local database
+- [ ] Actor search with partial matches
+- [ ] Case-insensitive search functionality
+- [ ] Device rotation handling
+- [ ] Network error scenarios
+- [ ] Invalid input handling
+
+### Test Scenarios
+1. **Database Operations**: Create, read, update operations
+2. **API Integration**: Valid and invalid API calls
+3. **Search Functionality**: Various search patterns and edge cases
+4. **Orientation Changes**: State preservation during rotations
+5. **Network Conditions**: Offline/online behavior
 
 ## Known Limitations
 
-- Dice images require internet connection if using external resources
-- AI strategy may be computationally intensive on older devices
-- Win counter resets when app is completely closed
+- Requires active internet connection for OMDb API calls
+- API rate limits apply based on OMDb plan
+- Local database storage limited by device capacity
+- Search results dependent on OMDb data quality
 
 ## Future Enhancements
 
-Potential improvements for future versions:
-- **Multiplayer Mode**: Network play between devices
-- **Statistics Tracking**: Detailed game history and analytics
-- **Custom Dice Themes**: Different visual styles for dice
-- **Sound Effects**: Audio feedback for rolls and victories
-- **Difficulty Levels**: Adjustable AI intelligence
-- **Tournament Mode**: Best-of-X games series
+- **Offline Mode**: Enhanced offline functionality
+- **Advanced Search**: Multiple search criteria combinations
+- **Movie Ratings**: User rating and review system
+- **Favorites**: Personal movie collection management
+- **Image Display**: Movie poster integration
+- **Export/Import**: Database backup and restore functionality
+
+## API Documentation
+
+### OMDb API Endpoints Used
+- **Search by Title**: `/?t={title}&apikey={key}`
+- **Search by Title (Multiple)**: `/?s={title}&apikey={key}`
+
+### Required Parameters
+- `apikey`: Your personal API key from OMDb
+- `t`: Movie title for single result
+- `s`: Search term for multiple results
+
+## Troubleshooting
+
+### Common Issues
+
+1. **API Key Errors**
+   - Verify API key is correctly configured
+   - Check OMDb account status and usage limits
+
+2. **Database Issues**
+   - Clear app data if database corruption occurs
+   - Check Room database configuration
+
+3. **Network Problems**
+   - Verify internet connection
+   - Check firewall settings for API access
+
+4. **Search Not Working**
+   - Ensure proper input formatting
+   - Check case sensitivity requirements
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/new-feature`)
+3. Commit your changes (`git commit -am 'Add new feature'`)
+4. Push to the branch (`git push origin feature/new-feature`)
+5. Create a Pull Request
 
 ### Development Guidelines
 - Follow Kotlin coding conventions
 - Use Jetpack Compose best practices
-- Maintain compatibility with minimum SDK version
-- Test on multiple device configurations
-- Document any new AI strategy modifications
+- Maintain Room database migrations
+- Test API integration thoroughly
+- Document any new API usage
 
 ## License
 
@@ -221,4 +311,13 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **[Rehan Godakumbura]**
 - GitHub: [@rehangodakumbura](https://github.com/rehangodakumbura)
-- Email: rehangod2003@gmail.com
+- Email: your.email@example.com
+
+## External Resources
+
+- [OMDb API Documentation](http://www.omdbapi.com/)
+- [Android Developer Guides](https://developer.android.com/guide)
+- [Jetpack Compose Documentation](https://developer.android.com/jetpack/compose)
+- [Room Database Guide](https://developer.android.com/training/data-storage/room)
+
+---
